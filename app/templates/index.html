@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Trends</title>
+    <script>
+        async function fetchTrends() {
+            const response = await fetch('/run-script', { method: 'POST' });
+            if (response.ok) {
+                alert('Script executed successfully!');
+                const resultData = await fetch('/results');
+                const trends = await resultData.json();
+                const list = document.getElementById('trend-list');
+                list.innerHTML = trends.map(trend => `
+                    <li>
+                        <strong>IP Address:</strong> ${trend.ip_address}<br>
+                        <strong>Date Time:</strong> ${trend.date_time}<br>
+                        <strong>Trends:</strong> ${trend.trends.join(', ')}
+                    </li>
+                `).join('');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Twitter Trending Topics</h1>
+    <button onclick="fetchTrends()">Fetch Trends</button>
+    <ul id="trend-list"></ul>
+</body>
+</html>
